@@ -37,8 +37,17 @@
         margin: 20px 0 0 0
     }
 
+    .map_btn p {
+        color: #fff;
+        text-align: center;
+        position: relative;
+        font-size: 14px;
+        padding-top: 10px;
+    }
+
+
     .map_btn button{
-        margin-top: 25%;
+        margin-top: 10%;
     }
 
     .map_btn:hover {
@@ -60,6 +69,11 @@
     }
     .olControlOverviewMapElement {
         background-color: white;
+    }
+
+    .tutorial img{
+        border: 1px solid rgb(0, 0, 0.1);
+        box-shadow: 0 0 5px #888;
     }
 </style>
 
@@ -96,17 +110,53 @@
 <!-- tutorials -->
 <div id="welcome" class="modal hide fade" style="display: none;">
     <div class="modal-header">
-        <h3>Welcome to timeline tutorial</h3>
+        <h3>Welcome to the best tile tutorial</h3>
     </div>
     <div class="modal-body">
-        <p>This tutorial will explain you how you can participate in this
-            application</p>
+        <div id="0">
+            <p>In order to assess deforestation, experts analyze several satellite
+            images from the same area.</p> 
+            <p>They analyze several images because there are some cases
+            where the pictures will have too many clouds or broken areas (white stripes).</p> 
+            <p>When this happens, the experts will pick the best photo from the same area but from a different day, so 
+            they can build a "perfect" photo where all we could see is the forest.
+            </p>
+        </div>
+        <div id="1" style="display:none;">
+            <p>Thks application tries to replicate this procedure but involving more
+            people in the process.</p> 
+            <p>The idea is to get this stage of the work flow as 
+            fast as possible, so the next steps could use those "final pictures" earlier.</p>
+        </div>
+        <div id="2" style="display:none;">
+            <p>The application will load for you several photos from the same area.</p>
+            <p>You will have to pick the photo that you think that shows more forest or green area.</p>
+            <p>For example, this photo is a really good one </p>
+            <img class="tutorial" src="http://img440.imageshack.us/img440/5341/greenil.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
+            <p>While these ones show a cloudy or broken area: </p>
+            <img src="http://img534.imageshack.us/img534/1571/cloudd.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
+            <img src="http://img255.imageshack.us/img255/561/whitew.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
+        </div>
+        <div id="3" style="display:none;">
+            <p>Now let's see how you can interact with the application</p>
+        </div>
     </div>
+
     <div class="modal-footer">
-        <button class="btn btn-success">Next</button>
+        <button class="btn btn-success" onclick="show()">Next</button>
     </div>
 </div>
 
+<div id="end" class="modal hide fade" style="display: none;">
+    <div class="modal-header">
+        <h3>Now start contributing!</h3>
+    </div>
+    <div class="modal-body">
+        <p><strong>Congratulations!!!</strong> You have finished the tutorial.</p>
+        <p>Now you can start participating in the real project!</p>
+        <a href="./newtask" class="btn btn-large btn-primary">Start contributing!</a>
+    </div>
+</div>
 
 
 <!-- Header of the task -->
@@ -132,7 +182,9 @@
 var mapfile = "map=/home/forestwatchers/map/timeline.map";
 var server = "http://forestwatchers.net/cgi-bin/mapserv" + "?" + mapfile;
 
-var totalArea = 0;
+var tut = 0;
+var pop = 0;
+
 // Map options
 var options = {
     allowOverlays: true,
@@ -166,6 +218,43 @@ function spinnerStop() {
     $("#throbber").hide();
 }
 
+
+function show(){
+    tut = tut + 1;
+    var max = 4
+    if (tut < max) {
+        if (tut >= 1) {
+            $("#" + (tut-1)).hide();
+        }
+        $("#" + tut).show();
+    }
+    else {
+        $("#welcome").modal("hide");
+        $("#elem1").hide();
+        $("#elem2").hide();
+        $("#pop" + pop).popover({
+            'title': "<strong>Getting more info<strong>",
+            'content': "Hover your mouse over the photo to see more information about the photo",
+        });
+        $("#btn" + pop).popover({
+            'title': "<strong>Save your answer<strong>",
+            'content': "This button will submit this photo as the <i>clearest</i> one, and load a new area for you. Click on it to finish the tutorial!",
+        });
+
+        $("#pop" + pop).popover("show");
+        $("#mask" + pop).bind('hover', function() { 
+            $("#pop" + pop).popover("hide");
+            $("#btn" + pop).popover("show");
+        });
+    }
+}
+
+function showPop(tut,pop) {
+    $("#" + pop).popover();
+    $("#" + tut).modal("hide");
+    $("#" + pop).popover("show");
+}
+
 // Start with tutorials, the rest will load in the background
 $("#welcome").modal("show");
 
@@ -174,7 +263,8 @@ function initializeMaps(tiles) {
     var i=0;
     var n = tiles.length;
     for (i=0;i<n;i++){
-        map_div_id = tiles[i].replace('.tif', '');
+        //map_div_id = tiles[i].replace('.tif', '');
+        map_div_id = "pop" + i;
         map[i] = new OpenLayers.Map(map_div_id, {
             controls: [
             //    new OpenLayers.Control.Navigation(),
@@ -236,37 +326,45 @@ function center(bounds, restrictedExtent, nMaps) {
     spinnerStop();
 }
 
+
+// TODO: add the validation
+// See: http://stackoverflow.com/questions/4048688/how-can-i-convert-day-of-year-to-date-in-javascript
+function dateFromDay( dateString ){
+    var year = dateString.substring(0,4);
+    console.log(year);
+    var day = dateString.substring(4);
+    var date = new Date(year, 0); // initialize a date in `year-01-01`
+    return new Date(date.setDate(day)); // add the number of days
+}
+
 // Load the task data into the HTML skeleton
-function loadTask ( task ) {
-   if ( !$.isEmptyObject(task) ) {
+function loadTask() {
+   var task = {"info": {"tile": {"tiles": ["2011358.tif", "2011359.tif", "2011360.tif"], "projection": "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433],AUTHORITY[\"EPSG\",\"4326\"]]", "restrictedExtent": [-53.68570053901632, -8.943450313500003, -53.554929289016314, -8.827201407250003], "bounds": [-57.739609289016386, -12.430917501000005, -53.554929289016385, -8.710952501000005], "height": 1657, "width": 1864, "name": "FAS_Brazil7/"}, "question": "Which is the clearest image for this area?"}, "quorum": 0, "calibration": 0, "created": "2012-08-22T13:24:30.672998", "app_id": 166, "state": "0", "id": 14422, "priority_0": 0.0};
+
        spinnerStart();
-       if (task.state=='completed') {
-           $('#controls').hide();
-           $('#answer').hide();
-           $('#disqus_thread').hide();
-           $('#taskcompleted').show();
-       }
 
        // Add divs for the maps
-       console.log(task);
        var tiles = task.info.tile.tiles;
        var l = tiles.length;
        var i = 0;
        var t = Math.floor(12/l);
        var width = t * 60;
        // Mustache template for creating the maps
-       var tpl = '<div id="elem" class="skeleton {{class}}">'+ 
+       var tpl = '<div id="elem{{tile}}" class="skeleton {{class}}">'+ 
                  '<div class="map_cnt">' + 
-                 '<div id="{{tile}}" class="map_canvas" style="height: {{height}}px;"></div>' +
-                 '<div class="map_btn" style="width: 100%; height: {{height}}px;">' + 
+                 '<div id="pop{{tile}}" class="map_canvas" style="height: {{height}}px;"></div>' +
+                 '<div id="mask{{tile}}" class="map_btn" style="width: 100%; height: {{height}}px;">' + 
                  '<h3>Tile: {{tile}}</h3>' + 
-                 '<button class="btn btn-large btn-primary" onclick="submitTask(\'{{tile}}\')"><i class="icon-ok"></i> Submit this tile!</button>' +
+                 '<p>The photo was taken: {{date}}</p>' + 
+                 '<button id="btn{{tile}}"class="btn btn-large btn-primary" onclick="submitTask(\'{{tile}}\')"><i class="icon-ok"></i> Submit this tile!</button>' +
                  '</div>' + 
                  '</div>'+ 
                  '</div>';
        for (i=0;i<l;i++) {
            // Obj to pass to the template
-           var obj = {'tile': tiles[i].replace('.tif', ''), 
+           var tmpDate = dateFromDay(tiles[i].replace('.tif','')).toDateString();
+           var obj = {'tile': i,
+                      'date': tmpDate,
                       'class': 'span' + t,
                       'width': width,
                       'height': width,
@@ -283,42 +381,14 @@ function loadTask ( task ) {
 
        // Center the map for this task
        center(task.info.tile.bounds, task.info.tile.restrictedExtent, l);
-   }
-   else {
-       $(".skeleton").hide();
-       $("#finish").fadeIn();
-   }
 }
 
-// pybossa.newTask("besttile", "http://forestwatchers.net/pybossa").done( function( data ) { 
-pybossa.newTask("besttile").done( function( data ) { 
-
-    if ( !$.isEmptyObject(data.task) ) {
-        //window.location.pathname = "/pybossa/app/besttile/task/" + data.task.id;
-        loadTask(data.task);
-    }
-   else {
-        $(".skeleton").hide();
-        $("#finish").fadeIn();
-    }
-});
-
+loadTask();
 
 // Saves the answer for the given task
-function submitTask(answer) {
-    task_id = $("#task-id").text();
-    console.log(answer);
-
-    //pybossa.saveTask( task_id, {'besttile': answer}, "http://forestwatchers.net/pybossa").done( function(data) {
-    pybossa.saveTask( task_id, {'besttile': answer}).done( function(data) {
-        // Show the feedback div
-        $("#success").fadeIn(); 
-        // Fade out the pop-up after a 1000 miliseconds
-        setTimeout(function() { $("#success").fadeOut() }, 1000);
-        // Request a new task
-        // window.location.pathname = '/pybossa/app/besttile/newtask';
-        window.location.pathname = '/app/besttile/newtask';
-    });
+function submitTask() {
+ $("#btn" + pop).popover("destroy");
+ $("#end").modal("show");
 
 }
 </script>
