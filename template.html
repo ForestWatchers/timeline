@@ -235,7 +235,7 @@ function center(bounds, restrictedExtent, nMaps) {
 // See: http://stackoverflow.com/questions/4048688/how-can-i-convert-day-of-year-to-date-in-javascript
 function dateFromDay( dateString ){
     var year = dateString.substring(0,4);
-    console.log(year);
+    //console.log(year);
     var day = dateString.substring(4);
     var date = new Date(year, 0); // initialize a date in `year-01-01`
     return new Date(date.setDate(day)); // add the number of days
@@ -244,8 +244,8 @@ function dateFromDay( dateString ){
 // Load the task data into the HTML skeleton
 function loadTask ( task_id ) {
     var t = $.ajax({
-        //url: '/api/task/'+task_id,
-        url: '/pybossa/api/task/'+task_id,
+        url: '/api/task/'+task_id,
+        //url: '/pybossa/api/task/'+task_id,
         dataType: 'json'
     });
 
@@ -265,8 +265,13 @@ function loadTask ( task_id ) {
             var i = 0;
             var t = Math.floor(12/l);
             var width = t * 60;
+            if (t < 4) {
+                t = 4;
+                var offset = Math.floor(l%3); // 3 tiles of Span4
+                width = 60 * t; // Span4
+            }
             // Mustache template for creating the maps
-            var tpl = '<div id="elem" class="skeleton {{class}}">'+ 
+            var tpl = '<div id="elem" class="skeleton {{class}}" style="padding-bottom:10px;">'+ 
                       '<div class="map_cnt">' + 
                       '<div id="{{tile}}" class="map_canvas" style="height: {{height}}px;"></div>' +
                       '<div class="map_btn" style="width: 100%; height: {{height}}px;">' + 
@@ -278,7 +283,6 @@ function loadTask ( task_id ) {
                       '</div>';
             for (i=0;i<l;i++) {
                 // Obj to pass to the template
-
                 var tmpDate = dateFromDay(tiles[i].replace('.tif','')).toDateString();
                 var obj = {'tile': tiles[i].replace('.tif', ''), 
                            'date': tmpDate,
@@ -286,6 +290,15 @@ function loadTask ( task_id ) {
                            'width': width,
                            'height': width,
                 };
+                //console.log( i  + ", " + ( l - offset ));
+                if (i == (l - offset)) {
+                    if (offset == 1) {
+                        obj['class'] = 'span' + t + ' offset4';
+                    }
+                    else {
+                        obj['class'] = 'span' + t + ' offset' + offset;
+                    }
+                }
                 $("#maps").append(Mustache.to_html(tpl,obj));
             }
 
@@ -312,12 +325,12 @@ if (taskId){
     loadTask(taskId);
 }
 else {
-    pybossa.newTask("besttile", "http://forestwatchers.net/pybossa").done( function( data ) { 
-    //pybossa.newTask("besttile").done( function( data ) { 
+    //pybossa.newTask("besttile", "http://forestwatchers.net/pybossa").done( function( data ) { 
+    pybossa.newTask("besttile").done( function( data ) { 
 
         if ( !$.isEmptyObject(data.task) ) {
-            window.location.pathname = "/pybossa/app/besttile/task/" + data.task.id;
-            //window.location.pathname = "/app/besttile/task/" + data.task.id;
+            //window.location.pathname = "/pybossa/app/besttile/task/" + data.task.id;
+            window.location.pathname = "/app/besttile/task/" + data.task.id;
         }
        else {
             $(".skeleton").hide();
@@ -330,17 +343,17 @@ else {
 // Saves the answer for the given task
 function submitTask(answer) {
     task_id = $("#task-id").text();
-    console.log(answer);
+    //console.log(answer);
 
-    pybossa.saveTask( task_id, {'besttile': answer}, "http://forestwatchers.net/pybossa").done( function(data) {
-    //pybossa.saveTask( task_id, {'besttile': answer}).done( function(data) {
+    //pybossa.saveTask( task_id, {'besttile': answer}, "http://forestwatchers.net/pybossa").done( function(data) {
+    pybossa.saveTask( task_id, {'besttile': answer}).done( function(data) {
         // Show the feedback div
         $("#success").fadeIn(); 
         // Fade out the pop-up after a 1000 miliseconds
         setTimeout(function() { $("#success").fadeOut() }, 1000);
         // Request a new task
-         window.location.pathname = '/pybossa/app/besttile/newtask';
-        //window.location.pathname = '/app/besttile/newtask';
+        //window.location.pathname = '/pybossa/app/besttile/newtask';
+        window.location.pathname = '/app/besttile/newtask';
     });
 
 }
