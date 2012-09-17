@@ -104,12 +104,27 @@
 
 <!-- Header of the task -->
 <div class="row">
-  <div class="skeleton span12">
+  <div class="skeleton span10">
     <div id="question">
       <h1>Question</h1>
       <!--<h3 id="area">Area</h3>-->
-      <p>Task: <span id="task-id" class="label label-warning">#</span></p>
+    </div>
+  </div>
+  <div class="skeleton span2 pull-right">
+      <a href="../tutorial" class="btn btn-primary btn-large"> Tutorial</a>
+  </div>
 </div>
+
+<div class="row skeleton">
+    <div class="span12">
+        <p>You have completed: <span id="done" class="label label-info"></span> tasks from
+        <span id="total" class="label label-inverse"></span> You are now working in Task: <span id="task-id" class="label label-warning">#</span></p>
+        <div class="progress progress-striped">
+            <div id="progress" rel="tooltip" title="#" class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
+
 <!-- Map Canvas -->
           <div id="throbber"></div>
 <div id="maps" class="row">
@@ -126,7 +141,7 @@
 <!-- PyBossa interface -->
 <script>
 // Map Server URL
-var mapfile = "map=/home/forestwatchers/map/timeline.map";
+var mapfile = "map=/home/forestwatchers/map/timeline2.map";
 var server = "http://forestwatchers.net/cgi-bin/mapserv" + "?" + mapfile;
 
 var totalArea = 0;
@@ -244,8 +259,8 @@ function dateFromDay( dateString ){
 // Load the task data into the HTML skeleton
 function loadTask ( task_id ) {
     var t = $.ajax({
-        url: '/api/task/'+task_id,
-        //url: '/pybossa/api/task/'+task_id,
+        //url: '/api/task/'+task_id,
+        url: '/pybossa/api/task/'+task_id,
         dataType: 'json'
     });
 
@@ -303,6 +318,7 @@ function loadTask ( task_id ) {
             }
 
             $("#question h1").text(task.info.question);
+            loadUserProgress();
             //$("#question h3").text(task.info.tile.name);
             $("#task-id").text(task.id);
             spinnerStop();
@@ -325,12 +341,12 @@ if (taskId){
     loadTask(taskId);
 }
 else {
-    //pybossa.newTask("besttile", "http://forestwatchers.net/pybossa").done( function( data ) { 
-    pybossa.newTask("besttile").done( function( data ) { 
+    pybossa.newTask("besttile", "http://forestwatchers.net/pybossa").done( function( data ) { 
+    //pybossa.newTask("besttile").done( function( data ) { 
 
         if ( !$.isEmptyObject(data.task) ) {
-            //window.location.pathname = "/pybossa/app/besttile/task/" + data.task.id;
-            window.location.pathname = "/app/besttile/task/" + data.task.id;
+            window.location.pathname = "/pybossa/app/besttile/task/" + data.task.id;
+            //window.location.pathname = "/app/besttile/task/" + data.task.id;
         }
        else {
             $(".skeleton").hide();
@@ -340,20 +356,32 @@ else {
 }
 
 
+function loadUserProgress() {
+    pybossa.userProgress('besttile', 'http://forestwatchers.net/pybossa').done(function(data){
+    //pybossa.userProgress('besttile').done(function(data){
+        var pct = Math.round((data.done*100)/data.total);
+        $("#progress").css("width", pct.toString() +"%");
+        $("#progress").attr("title", pct.toString() + "% completed!");
+        $("#progress").tooltip({'placement': 'top'}); 
+        $("#total").text(data.total);
+        $("#done").text(data.done);
+    });
+}
+
 // Saves the answer for the given task
 function submitTask(answer) {
     task_id = $("#task-id").text();
-    //console.log(answer);
+    console.log(answer);
 
-    //pybossa.saveTask( task_id, {'besttile': answer}, "http://forestwatchers.net/pybossa").done( function(data) {
-    pybossa.saveTask( task_id, {'besttile': answer}).done( function(data) {
+    pybossa.saveTask( task_id, {'besttile': answer}, "http://forestwatchers.net/pybossa").done( function(data) {
+    //pybossa.saveTask( task_id, {'besttile': answer}).done( function(data) {
         // Show the feedback div
         $("#success").fadeIn(); 
         // Fade out the pop-up after a 1000 miliseconds
         setTimeout(function() { $("#success").fadeOut() }, 1000);
         // Request a new task
-        //window.location.pathname = '/pybossa/app/besttile/newtask';
-        window.location.pathname = '/app/besttile/newtask';
+        window.location.pathname = '/pybossa/app/besttile/newtask';
+        //window.location.pathname = '/app/besttile/newtask';
     });
 
 }
