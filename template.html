@@ -113,6 +113,10 @@
 <!-- Map Canvas -->
           <div id="throbber"></div>
 <div id="maps" class="row">
+
+</div>
+<div style="text-align:center; padding-top:20px;"> 
+      <a href="../tutorial" class="btn btn-primary btn-large"> Tutorial</a>
 </div>
 
 <script src="/static/openlayers/OpenLayers.js"></script>
@@ -240,7 +244,8 @@ function dateFromDay( dateString ){
 // Load the task data into the HTML skeleton
 function loadTask ( task_id ) {
     var t = $.ajax({
-        url: '/api/task/'+task_id,
+        //url: '/api/task/'+task_id,
+        url: '/pybossa/api/task/'+task_id,
         dataType: 'json'
     });
 
@@ -307,12 +312,12 @@ if (taskId){
     loadTask(taskId);
 }
 else {
-    // pybossa.newTask("besttile", "http://forestwatchers.net/pybossa").done( function( data ) { 
-    pybossa.newTask("besttile").done( function( data ) { 
+    pybossa.newTask("besttile", "http://forestwatchers.net/pybossa").done( function( data ) { 
+    //pybossa.newTask("besttile").done( function( data ) { 
 
         if ( !$.isEmptyObject(data.task) ) {
-            //window.location.pathname = "/pybossa/app/besttile/task/" + data.task.id;
-            window.location.pathname = "/app/besttile/task/" + data.task.id;
+            window.location.pathname = "/pybossa/app/besttile/task/" + data.task.id;
+            //window.location.pathname = "/app/besttile/task/" + data.task.id;
         }
        else {
             $(".skeleton").hide();
@@ -327,15 +332,15 @@ function submitTask(answer) {
     task_id = $("#task-id").text();
     console.log(answer);
 
-    //pybossa.saveTask( task_id, {'besttile': answer}, "http://forestwatchers.net/pybossa").done( function(data) {
-    pybossa.saveTask( task_id, {'besttile': answer}).done( function(data) {
+    pybossa.saveTask( task_id, {'besttile': answer}, "http://forestwatchers.net/pybossa").done( function(data) {
+    //pybossa.saveTask( task_id, {'besttile': answer}).done( function(data) {
         // Show the feedback div
         $("#success").fadeIn(); 
         // Fade out the pop-up after a 1000 miliseconds
         setTimeout(function() { $("#success").fadeOut() }, 1000);
         // Request a new task
-        // window.location.pathname = '/pybossa/app/besttile/newtask';
-        window.location.pathname = '/app/besttile/newtask';
+         window.location.pathname = '/pybossa/app/besttile/newtask';
+        //window.location.pathname = '/app/besttile/newtask';
     });
 
 }

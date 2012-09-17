@@ -108,7 +108,7 @@
 </div>
 
 <!-- tutorials -->
-<div id="welcome" class="modal hide fade" style="display: none;">
+<div id="welcome" class="modal hide fade" data-backdrop="static" style="display: none;">
     <div class="modal-header">
         <h3>Welcome to the best tile tutorial</h3>
     </div>
@@ -123,27 +123,43 @@
             </p>
         </div>
         <div id="1" style="display:none;">
-            <p>Thks application tries to replicate this procedure but involving more
-            people in the process.</p> 
-            <p>The idea is to get this stage of the work flow as 
+            <p>The application tries to replicate this procedure by involving
+            volunteers like you in the process.</p> 
+            <p>The idea is to complete this stage of the work flow as 
             fast as possible, so the next steps could use those "final pictures" earlier.</p>
         </div>
         <div id="2" style="display:none;">
             <p>The application will load for you several photos from the same area.</p>
-            <p>You will have to pick the photo that you think that shows more forest or green area.</p>
+            <p>You will have to pick the photo that you think shows the most forest or green area.</p>
             <p>For example, this photo is a really good one </p>
+            <p>
             <img class="tutorial" src="http://img440.imageshack.us/img440/5341/greenil.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
-            <p>While these ones show a cloudy or broken area: </p>
-            <img src="http://img534.imageshack.us/img534/1571/cloudd.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
-            <img src="http://img255.imageshack.us/img255/561/whitew.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
+            <i class="icon-ok-circle" style="font-size:96px;padding:5px;"></i>
+            </p>
+            <p>You can see some clouds, but the photo is showing a big <strong>green</strong> area.</p>
+            <p>You should try to pick the photo that features the biggest green area.</p>
         </div>
         <div id="3" style="display:none;">
-            <p>Now let's see how you can interact with the application</p>
+            <p>The next two photos show a cloudy and a broken area: </p>
+            <p>
+            <img src="http://img534.imageshack.us/img534/1571/cloudd.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
+           <i class="icon-remove-circle" style="font-size:96px;padding:5px;"></i>
+           </p>
+           <p>
+            <img src="http://img255.imageshack.us/img255/561/whitew.png" style="padding:5px; border: 1px solid rgb(0, 0, 0.1); box-shadow: 0 0 5px #888;">
+           <i class="icon-remove-circle" style="font-size:96px;padding:5px;"></i>
+           </p>
+           <p>These photos represent the bad cases that we want to avoid.</p>
+           <p>Always choose the photo with the biggest green area.</p>
+        </div>
+        <div id="4" style="display:none;">
+            <p>Now it's your turn to try!</p>
         </div>
     </div>
 
     <div class="modal-footer">
-        <button class="btn btn-success" onclick="show()">Next</button>
+        <button id="prev" class="btn" onclick="show('p')" style="display:none"><i class="icon-chevron-left"></i> Previous</button>
+        <button id="next" class="btn btn-success" onclick="show('n')">Next <i class="icon-chevron-right"></i> </button>
     </div>
 </div>
 
@@ -154,7 +170,7 @@
     <div class="modal-body">
         <p><strong>Congratulations!!!</strong> You have finished the tutorial.</p>
         <p>Now you can start participating in the real project!</p>
-        <a href="./newtask" class="btn btn-large btn-primary">Start contributing!</a>
+        <a href="./newtask" class="btn btn-large btn-primary"><i class="icon-thumbs-up"></i> Start contributing!</a>
     </div>
 </div>
 
@@ -219,33 +235,62 @@ function spinnerStop() {
 }
 
 
-function show(){
-    tut = tut + 1;
-    var max = 4
+function show(method){
+
+    if (method=='n') {
+        tut = tut + 1;
+    }
+    else {
+        tut = tut - 1;
+    }
+
+    var max = 5;
+    var min = 0;
+
     if (tut < max) {
-        if (tut >= 1) {
+        if (tut == min) {
+            $("#prev").hide();
+        }
+        else{
+            $("#prev").show();
+        }
+        if (method=="n") {
             $("#" + (tut-1)).hide();
+        }
+        else {
+            $("#" + (tut+1)).hide();
         }
         $("#" + tut).show();
     }
     else {
         $("#welcome").modal("hide");
-        $("#elem1").hide();
-        $("#elem2").hide();
+        $("#elem1").fadeTo('slow', 0.1);
+        $("#elem2").fadeTo('slow', 0.1);
         $("#pop" + pop).popover({
             'title': "<strong>Getting more info<strong>",
-            'content': "Hover your mouse over the photo to see more information about the photo",
+            'content': "Hover your mouse over the photo to get more information about it.",
+            'trigger': 'manual',
         });
         $("#btn" + pop).popover({
             'title': "<strong>Save your answer<strong>",
-            'content': "This button will submit this photo as the <i>clearest</i> one, and load a new area for you. Click on it to finish the tutorial!",
+            'content': "This button will submit this photo as the <i>clearest</i> one, and load a new set of photos for you. Click on it to finish the tutorial!",
+            'placement': 'bottom',
+            'trigger': 'manual',
         });
 
         $("#pop" + pop).popover("show");
-        $("#mask" + pop).bind('hover', function() { 
+        $("#mask" + pop).hover( function(){
+            // Action when entering
             $("#pop" + pop).popover("hide");
             $("#btn" + pop).popover("show");
+            //$("#elem1").show(); 
+            //$("#elem2").show(); 
+        }, function(){
+            // Action when leaving
+            $("#pop" + pop).popover("show");
+            $("#btn" + pop).popover("hide");
         });
+
     }
 }
 
@@ -388,7 +433,8 @@ loadTask();
 // Saves the answer for the given task
 function submitTask() {
  $("#btn" + pop).popover("destroy");
+ $("#pop" + pop).popover("destroy");
+ $("#mask" + pop).popover("destroy");
  $("#end").modal("show");
-
 }
 </script>
