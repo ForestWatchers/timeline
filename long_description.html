@@ -50,7 +50,7 @@ The ForestWatchers application gives you the option to participate and become on
     </div>
 </div>
 
-    <div id="map" style="width:680px; height:680px;border: 1px solid black;"></div>
+    <div id="map" style="width:800px; height:800px;border: 1px solid black;"></div>
 <script src="/static/openlayers/OpenLayers.js"></script>
 <script type="text/javascript">
      <!--
@@ -70,12 +70,12 @@ The ForestWatchers application gives you the option to participate and become on
 
      function init(){
          map = new OpenLayers.Map( 'map' );
-         layer1 = new OpenLayers.Layer.WMS( "Preliminary Results for BestTile (all tasks)", server1, 
+         layer1 = new OpenLayers.Layer.WMS( "All tasks", server1, 
            {
              layers: 'preliminaryall',
              isBaseLayer: true
             } );
-         layer2 = new OpenLayers.Layer.WMS( "Preliminary Results for BestTile (completed tasks)", server1, 
+         layer2 = new OpenLayers.Layer.WMS( "Completed tasks", server1, 
            {
              layers: 'preliminarycompleted',
             } );
