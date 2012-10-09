@@ -53,7 +53,7 @@ The ForestWatchers application gives you the option to participate and become on
 <script src="/static/openlayers/OpenLayers.js"></script>
 <script type="text/javascript">
      <!--
-     var map, layer1, layer2, vector1, vector2, vector3, vector4, vector5, point1, point2;
+     var map, layer1, layer1b, layer2, layer2b, vector1, vector2, vector3, vector4, vector5, point1, point2;
      var mapfile = "map=/home/forestwatchers/map/maps2012.map"
      var infomapfile = "map=/home/forestwatchers/map/infoshapes.map"
      var server1 = "http://forestwatchers.net/cgi-bin/mapserv?" + mapfile
@@ -74,9 +74,17 @@ The ForestWatchers application gives you the option to participate and become on
              layers: 'preliminaryall',
              isBaseLayer: true
             } );
+         layer1b = new OpenLayers.Layer.WMS( "Intensity map All tasks", server1, 
+           {
+             layers: 'intensityall',
+            } );
          layer2 = new OpenLayers.Layer.WMS( "Completed tasks", server1, 
            {
              layers: 'preliminarycompleted',
+            } );
+         layer2b = new OpenLayers.Layer.WMS( "Intensity map Completed tasks", server1, 
+           {
+             layers: 'intensitycompleted',
             } );
          vector1 = new OpenLayers.Layer.WMS( "Brazil (political map)", server2, 
            {
@@ -118,7 +126,9 @@ The ForestWatchers application gives you the option to participate and become on
              opacity: 1.0
             } );
          map.addLayer(layer1);
+         map.addLayer(layer1b);
          map.addLayer(layer2);
+         map.addLayer(layer2b);
          map.addLayer(vector5);
          map.addLayer(vector1);
          map.addLayer(vector2);
