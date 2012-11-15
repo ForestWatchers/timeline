@@ -1,17 +1,16 @@
 <div class="row">
-    <div class="span8">
+    <div class="span12">
+    <a class="btn btn-primary btn-large" href="http://forestwatchers.net/pybossa/app/besttile/newtask"><i class="icon-thumbs-up"></i> Start contributing!</a>
+    <hr>
 <p>
 Tropical forests provide habitat for most of the world’s known terrestrial plant and animal species. These ecosystems are under increasing threat worldwide. During the last decades, several million hectares of humid tropical forest were lost each year. Despite the proliferation of new remote sensing technologies, information about the status of world’s forest is limited and unevenly distributed.</p>
-</div>
-<div class="span4">
-<a class="btn btn-primary btn-large" href="http://forestwatchers.net/pybossa/app/besttile/newtask"><i class="icon-thumbs-up"></i> Start contributing!</a>
-</div>
+    </div>
 </div>
 <div class="row">
 <div class="span4">
 <img class="img-polaroid pull-left" src="http://forestwatchers.net/assets/static/img/burning.jpg">
 </div>
-<div class="span4">
+<div class="span8">
 <p>
 The immense task of protecting for future generations an adequate share of world’s remaining forest is outside the reach of traditional conservation strategies alone. It calls for collective action to complement existing initiatives.</p>
 <p>
@@ -20,7 +19,7 @@ ForestWatchers proposes a new paradigm in conservationism based on the convergen
 </div>
 </div>
 <div class="row">
-<div class="span8">
+<div class="span12">
 <p style="padding-top:10px">
 <p><strong>This application tries to reflect one of the first steps carried out by deforestation experts when they assess deforestation for a given area of the forest</strong>.
 </p>
@@ -35,7 +34,7 @@ The ForestWatchers application gives you the option to participate and become on
 </div>
 
 <div class="row">
-    <div class="span10">
+    <div class="span12">
         <h3>Preliminary results <small>updated 4 times per day</small></h3>
         <p>The results presented here are based on the answers from volunteers. The resulting images are updated 4 times per day.</p>
         
@@ -47,13 +46,105 @@ The ForestWatchers application gives you the option to participate and become on
         
         <p><i>If a task is not completed</i>, the image shown is that from the first day of
         the series.</p>
-        <p>The <strong>intensity map</strong> represents the confidence in the selected tile. The most popular tile voted by the volunteers is represented using a greener color.</p>
-        <p>We are building two intensity maps:</p>
+        <p>The <strong>Heat map</strong> represents the confidence in the selected tile. Red color is used to represent when the community does not fully agree on the same tile for an area, while blue is used to represent when most of the volunteers agree on the same time:</p>
+        <div class="well well-small span7">
+            <h4>Heat Map Legend <small>percentage of acknowledgement</small></h4>
+            <div class="row">
+                <div class="span2">
+                    [0%]
+                </div>
+                <div class="span2" style="background-color:rgb(255,0,0);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+                <div class="span2">
+                    [51%-60%]
+                </div>
+                <div class="span2" style="background-color:rgb(0,0,127);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="span2">
+                    [01%-10%]
+                </div>
+                <div class="span2" style="background-color:rgb(229,0,0);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+                <div class="span2">
+                    [61%-70%]
+                </div>
+                <div class="span2" style="background-color:rgb(0,0,153);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="span2">
+                    [11%-20%]
+                </div>
+                <div class="span2" style="background-color:rgb(204,0,0);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+                <div class="span2">
+                    [71%-80%]
+                </div>
+                <div class="span2" style="background-color:rgb(0,0,178);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="span2">
+                    [21%-30%]
+                </div>
+                <div class="span2" style="background-color:rgb(178,0,0);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+                <div class="span2">
+                    [81%-90%]
+                </div>
+                <div class="span2" style="background-color:rgb(0,0,204);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="span2">
+                    [31%-40%]
+                </div>
+                <div class="span2" style="background-color:rgb(153,0,0);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+                <div class="span2">
+                    [91%-99%]
+                </div>
+                <div class="span2" style="background-color:rgb(0,0,229);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+            </div>
+            <div class="row">
+                <div class="span2">
+                    [49%-50%]
+                </div>
+                <div class="span2" style="background-color:rgb(127,0,0);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+                <div class="span2">
+                    [100%]
+                </div>
+                <div class="span2" style="background-color:rgb(0,0,255);width:30px;height:14px;margin-top:2px;margin-left:-3px;">
+                   &nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span10">
+        <p>We are building <strong>two heat maps</strong>:</p>
         <ol>
-            <li>for completed tasks only, i.e., tasks that already received at least 30 votes from the volunteers; and </li>
-            <li>another one for all the desired area.</li>
+            <li>for <strong>completed tasks</strong> only, i.e., tasks that already received at least 30 votes from the volunteers; and </li>
+            <li>another one for <strong>all the desired area</strong>.</li>
         </ol>
-        <p>We are expecting that the intensity map for the entire area will be a little darker since it has not received enough votes yet. In some cases, even the completed tasks may not have an intense green as its colour, because the selected tile did not receive a high percentage of the votes, it only received enough votes to make it the winner.</p>
+        <p>We are expecting that the heat map for the entire area will be dominated by blue color since it has not received enough votes yet.</p>
     </div>
 </div>
 
@@ -82,17 +173,17 @@ The ForestWatchers application gives you the option to participate and become on
              layers: 'preliminaryall',
              isBaseLayer: true
             } );
-         layer1b = new OpenLayers.Layer.WMS( "Intensity map All tasks", server1, 
+         layer1b = new OpenLayers.Layer.WMS( "Heat map All tasks", server1, 
            {
-             layers: 'intensityall',
+             layers: 'heatall',
             } );
          layer2 = new OpenLayers.Layer.WMS( "Completed tasks", server1, 
            {
              layers: 'preliminarycompleted',
             } );
-         layer2b = new OpenLayers.Layer.WMS( "Intensity map Completed tasks", server1, 
+         layer2b = new OpenLayers.Layer.WMS( "Heat map Completed tasks", server1, 
            {
-             layers: 'intensitycompleted',
+             layers: 'heatcompleted',
             } );
          vector1 = new OpenLayers.Layer.WMS( "Brazil (political map)", server2, 
            {
