@@ -55,15 +55,6 @@
     }
 
 
-    #throbber {
-        position:absolute;
-        z-index: 10000;
-        width: 100px;
-        height: 100px;
-        margin-top: 105px;
-        margin-left: 260px;
-    }
-
     .layersDiv label {
         color: white;
     }
@@ -129,7 +120,6 @@
 </div>
 
 <!-- Map Canvas -->
-          <div id="throbber"></div>
 <div id="maps" class="row">
 
 </div>
@@ -139,7 +129,6 @@
 
 <script src="/static/openlayers/OpenLayers.js"></script>
 <script src="http://mustache.github.com/extras/mustache.js"></script>
-<script src="/static/js/throbber/throbber.js"></script>
 <script src="/static/js/pybossa/pybossa.js" type="text/javascript"></script>
 <!-- PyBossa interface -->
 <script>
@@ -157,29 +146,6 @@ var options = {
 var map = [];
 
 var boxes  = new OpenLayers.Layer.Boxes( "Limits of the tile" );
-
-// Spinner to give feedback to the user when the map is getting loaded or something is taking place in the background
-var spinner = new Throbber({ 
-    color: 'black',
-    size: 90
-});
-// Array of spinners to show loading progress
-var map_spinner = [];
-// The spinner is attached to a div overlayed in top of the map. This div is only shown when the spinner is active, 
-// otherwise, the div is hidden from the view to show the map.
-spinner.appendTo (document.getElementById('throbber'));
-
-// This function shows the spinner div and starts its animation
-function spinnerStart() {
-    $("#throbber").show();
-    spinner.start();
-}
-
-// This function stops the spinner and hides the spinner div
-function spinnerStop() {
-    spinner.stop();
-    $("#throbber").hide();
-}
 
 // This function creates the map, the layers, and sets up the map
 function initializeMaps(tiles) {
@@ -225,8 +191,6 @@ function initializeMaps(tiles) {
 function center(bounds, restrictedExtent, nMaps) {
     // bounds = [left, bottom, right, top]
     // restrictedExtent = [left, bottom, right, top]
-    // As this action could take some time, start the spinner
-    spinnerStart();
     // Convert the bounds and restrictedExtent to valid OpenLayers objects
     var b = new OpenLayers.Bounds.fromArray(bounds);
     var r = new OpenLayers.Bounds.fromArray(restrictedExtent);
@@ -244,8 +208,6 @@ function center(bounds, restrictedExtent, nMaps) {
         })
         map[i].zoomToExtent(r);
     }
-    // Stop the spinner as the map has been configured
-    spinnerStop();
 }
 
 
@@ -269,7 +231,6 @@ function loadTask ( task_id ) {
 
     t.done( function (task) {
         if ( !$.isEmptyObject(task) ) {
-            spinnerStart();
             if (task.state=='completed') {
                 $('#controls').hide();
                 $('#answer').hide();
@@ -324,7 +285,6 @@ function loadTask ( task_id ) {
             loadUserProgress();
             //$("#question h3").text(task.info.tile.name);
             $("#task-id").text(task.id);
-            spinnerStop();
 
             initializeMaps(tiles);
 
