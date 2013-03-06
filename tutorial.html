@@ -26,7 +26,7 @@
         transition: all 0.4s ease-in-out;
     }
 
-    .map_btn h3 {
+    .map_btn h2 {
         text-transform: uppercase;
         color: #fff;
         text-align: center;
@@ -45,9 +45,16 @@
         padding-top: 10px;
     }
 
+    .popover-content p {
+        color: #333;
+        padding-top: 0;
+        font-size: 13px;
+
+    }
+
 
     .map_btn button{
-        margin-top: 10%;
+        margin-top: 30%;
     }
 
     .map_btn:hover {
@@ -182,10 +189,11 @@
       <h1>Question</h1>
       <!--<h3 id="area">Area</h3>-->
       <p>Task: <span id="task-id" class="label label-warning">#</span></p>
-</div>
-<!-- Map Canvas -->
-          <div id="throbber"></div>
-<div id="maps" class="row">
+    </div>
+    <!-- Map Canvas -->
+    <div id="throbber"></div>
+    <div id="maps" class="row"></div>
+  </div>
 </div>
 
 <script src="/static/openlayers/OpenLayers.js"></script>
@@ -270,12 +278,14 @@ function show(method){
             'title': "<strong>Getting more info<strong>",
             'content': "Hover your mouse over the photo to get more information about it.",
             'trigger': 'manual',
+            'html': true,
         });
         $("#btn" + pop).popover({
             'title': "<strong>Save your answer<strong>",
-            'content': "This button will submit this photo as the <i>clearest</i> one, and load a new set of photos for you. Click on it to finish the tutorial!",
-            'placement': 'bottom',
+            'content': "This button will submit this photo as the <i>clearest</i> one. Click on it to finish the tutorial!",
+            'placement': 'top',
             'trigger': 'manual',
+            'html': true,
         });
 
         $("#pop" + pop).popover("show");
@@ -399,9 +409,9 @@ function loadTask() {
                  '<div class="map_cnt">' + 
                  '<div id="pop{{tile}}" class="map_canvas" style="height: {{height}}px;"></div>' +
                  '<div id="mask{{tile}}" class="map_btn" style="width: 100%; height: {{height}}px;">' + 
-                 '<h3>Tile: {{tile}}</h3>' + 
+                 '<h2>Tile: {{tile}}</h2>' + 
                  '<p>The photo was taken: {{date}}</p>' + 
-                 '<button id="btn{{tile}}"class="btn btn-large btn-primary" onclick="submitTask(\'{{tile}}\')"><i class="icon-ok"></i> Submit this tile!</button>' +
+                 '<button id="btn{{tile}}" class="btn btn-large btn-primary" onclick="submitTask(\'{{tile}}\')"><i class="icon-ok"></i> Submit this tile!</button>' +
                  '</div>' + 
                  '</div>'+ 
                  '</div>';
